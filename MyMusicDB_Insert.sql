@@ -73,7 +73,8 @@ INSERT INTO artist_genre ("artist_id", "genre_id") VALUES
 	('5', '5'),
 	('6', '6'),
 	('7', '7'),
-	('8', '2');
+	('8', '2'),
+	('3', '2');
 
 INSERT INTO track_collection ("track_id", "collection_id") VALUES
 	('5', '1'),
