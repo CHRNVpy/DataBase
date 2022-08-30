@@ -38,7 +38,7 @@ SELECT a."name", t.length  FROM artist a
 JOIN artist_album aa ON a.id = aa.album_id  
 JOIN album a2 ON aa.album_id = a2.id 
 JOIN track t ON a2.id = t.album
-WHERE t.length = (SELECT MIN(t.length) FROM track t) 
+WHERE t.length = (SELECT MIN(t.length) FROM track t);
 
 WITH name_count AS (
 SELECT c."name", count(tc.track_id) FROM collection c 
@@ -46,4 +46,4 @@ JOIN track_collection tc ON c.id = tc.collection_id
 GROUP BY c."name"
 ORDER BY count)
 SELECT name, count FROM name_count
-WHERE count = (SELECT min(count) FROM name_count)
+WHERE count = (SELECT min(count) FROM name_count);
