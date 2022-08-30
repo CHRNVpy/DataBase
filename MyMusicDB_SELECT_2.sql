@@ -11,8 +11,9 @@ GROUP BY a."name"
 ORDER BY al DESC;
 
 SELECT a."name" FROM artist a
+WHERE a."name" NOT IN (SELECT a."name" FROM artist a
 JOIN album a2 ON a.id = a2.id 
-WHERE a2."year" != 2020;
+WHERE a2."year" = 2020);
 
 SELECT c."name" FROM collection c
 JOIN track_collection tc ON c.id = tc.collection_id
@@ -33,50 +34,16 @@ JOIN track_collection tc ON t.id = tc.track_id
 GROUP BY t."name" 
 HAVING count(*) = 0;
 
-SELECT a."name", MIN(t.length) FROM artist a 
+SELECT a."name", t.length  FROM artist a
 JOIN artist_album aa ON a.id = aa.album_id  
 JOIN album a2 ON aa.album_id = a2.id 
 JOIN track t ON a2.id = t.album
-GROUP BY a."name" 
-ORDER BY min
-LIMIT 1;
+WHERE t.length = (SELECT MIN(t.length) FROM track t) 
 
-SELECT c."name", COUNT(t."name") FROM collection c 
-JOIN track_collection tc ON c.id = tc.collection_id 
-JOIN track t ON tc.track_id = t.id 
-GROUP BY c."name" 
-ORDER BY count
-LIMIT 3;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
+WITH name_count AS (
+SELECT c."name", count(tc.track_id) FROM collection c 
+JOIN track_collection tc ON c.id = tc.collection_id
+GROUP BY c."name"
+ORDER BY count)
+SELECT name, count FROM name_count
+WHERE count = (SELECT min(count) FROM name_count)
